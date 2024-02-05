@@ -11,7 +11,11 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation'
 import { ReloadIcon } from '@radix-ui/react-icons'
 
-export default function NewPost() {
+type EditPageProps = {
+  params : { title: string }
+}
+
+export default function EditPost({params}: EditPageProps) {
   const router = useRouter()
   const [markdownData, setMarkdownData] = useState({
     title: '',
@@ -20,6 +24,25 @@ export default function NewPost() {
   })
   const [disabledButton, setDisabledButton] = useState(true)
   const [loadingButton, setLoadingButton] = useState(false)
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+
+  useEffect(()=>{
+    const request = async ()=>{
+      const paramsName = params.title.replace(/-/g, ' ')
+      const response = await axios.get(apiUrl+'/posts/'+paramsName)
+      const data = response.data.message
+      setMarkdownData((prev)=>{
+        return{
+          ...prev,
+          title: data.title,
+          description: data.description,
+          markdown: data.markdown,
+        }
+      })
+    }
+
+    request()
+  },[])
 
   useEffect(()=>{
     if(markdownData.title.length === 0 || markdownData.description.length === 0 || markdownData.markdown.length === 0 ){
@@ -42,10 +65,10 @@ export default function NewPost() {
 
   async function SendPost(){
     setLoadingButton(true)
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL
     const token = Cookies.get('token')
     const payload = markdownData
-    await axios.post(apiUrl+'/posts/new',payload ,{headers: { Authorization: `Bearer ${token}`}})
+    const paramsName = params.title.replace(/-/g, ' ')
+    await axios.put(apiUrl+'/posts/edit/'+paramsName, payload ,{headers: { Authorization: `Bearer ${token}`}})
     .then((res)=> {
       if(res.data.success){
         return router.push('/admin/dashboard')
@@ -63,7 +86,7 @@ export default function NewPost() {
         </div>
         <div className='pt-20 pb-10 px-10 md:px-16'>
           <div className='flex flex-row justify-between mt-2'>
-            <span className='font-bold text-2xl'>Create a new Post</span>
+            <span className='font-bold text-2xl'>Edit a Post</span>
             { loadingButton ?
               <Button disabled>
                 <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> Please wait
