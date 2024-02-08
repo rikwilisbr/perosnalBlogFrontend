@@ -45,7 +45,7 @@ export default function NewPost() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL
     const token = Cookies.get('token')
     const payload = markdownData
-    await axios.post(apiUrl+'/posts/new',payload ,{headers: { Authorization: `Bearer ${token}`}})
+    await axios.post(apiUrl+'/posts/new',payload , { withCredentials: true })
     .then((res)=> {
       if(res.data.success){
         return router.push('/admin/dashboard')

@@ -8,7 +8,7 @@ export default async function LoginMiddleware(request: NextRequest){
     method: 'GET', 
     headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token?.value}`
+        Cookie: `token=${token?.value}`
     } 
   }
 

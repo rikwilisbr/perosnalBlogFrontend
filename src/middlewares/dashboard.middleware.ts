@@ -8,7 +8,7 @@ export default async function DashboardMiddleware(request: NextRequest){
     method: 'GET', 
     headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token?.value}`
+        Cookie: `token=${token?.value}`
     } 
   }
 

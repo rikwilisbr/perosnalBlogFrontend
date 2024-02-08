@@ -1,9 +1,9 @@
 import { Button } from "./ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card"
 import { Suspense, use } from "react"
-import { cookies } from "next/headers"
 import axios from "axios"
 import Link from "next/link"
+import AdminDeleteDialog from "./adminDeleteDialog"
 
 type PostTypes = {
   id: string
@@ -15,8 +15,7 @@ type PostTypes = {
 
 export function AdminPosts() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
-  const token = cookies().get('token')
-  const postsData: PostTypes[] = use(axios.get(apiUrl+'/posts', {headers: { Authorization: `Bearer ${token?.value}`}}).then((res)=> { return res.data.message }))
+  const postsData: PostTypes[] = use(axios.get(apiUrl+'/posts').then((res)=> { return res.data.message }))
   
   function FormatName(name: string) {
     const result = name.replace(/ /g, "-");
@@ -39,10 +38,11 @@ export function AdminPosts() {
                       <CardContent>
                           <span className="text-sm text-neutral-500">{prop.description}</span>
                       </CardContent>
-                      <CardFooter className="flex">
+                      <CardFooter className="flex gap-2">
                         <Link href={`/admin/dashboard/edit/${FormatName(prop.title)}`}>
                           <Button>Edit</Button>
-                        </Link> 
+                        </Link>
+                        <AdminDeleteDialog postId={prop.id} />
                       </CardFooter>
                   </Card>
                   <div className="w-full h-[1px] bg-neutral-200"></div>
@@ -51,9 +51,6 @@ export function AdminPosts() {
           })
         } 
       </Suspense>
-      
-      
-       
     </div>
   )
 }

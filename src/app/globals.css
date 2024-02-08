@@ -74,3 +74,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom fonts */
+@layer utilities {
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .font-jetbrains-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}

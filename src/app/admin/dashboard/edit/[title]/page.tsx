@@ -68,7 +68,7 @@ export default function EditPost({params}: EditPageProps) {
     const token = Cookies.get('token')
     const payload = markdownData
     const paramsName = params.title.replace(/-/g, ' ')
-    await axios.put(apiUrl+'/posts/edit/'+paramsName, payload ,{headers: { Authorization: `Bearer ${token}`}})
+    await axios.put(apiUrl+'/posts/edit/'+paramsName, payload, {withCredentials: true})
     .then((res)=> {
       if(res.data.success){
         return router.push('/admin/dashboard')
