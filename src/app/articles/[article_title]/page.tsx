@@ -20,7 +20,7 @@ export default function ArticlePage({params}: EditPageProps) {
 
   return (
     <div className="flex flex-col py-[4rem] px-4 max-w-prose m-auto relative font-sans">
-        <Header />
+        <Header IsHighLighted=""/>
       <div className="flex flex-col gap-8 mt-10 w-full">
         <div className="prose">
             <div className="flex flex-col justify-between">

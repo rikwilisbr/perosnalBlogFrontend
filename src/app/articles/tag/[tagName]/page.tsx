@@ -15,14 +15,20 @@ type PostTypes = {
   tags: string[]
 }
 
-export default function Home() {
+type ArticleTagParamTypes = {
+    params:{
+        tagName: string
+    }
+}
+
+export default function ArticleTag({params}: ArticleTagParamTypes) {
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
-  const postsData: PostTypes[] = use(axios.get(apiUrl+'/posts/tag/homepage').then((res)=> { return res.data.message }))
+  const postsData: PostTypes[] = use(axios.get(apiUrl+'/posts/tag/'+params.tagName).then((res)=> { return res.data.message }))
 
   return (
     <div className="flex flex-col py-[4rem] px-4 max-w-prose m-auto relative font-sans">
-        <Header IsHighLighted={'home'} />
+        <Header IsHighLighted={''} />
       <div className="flex flex-col gap-8 mt-10 w-full">
         {
           postsData.map((prop, index)=>{

@@ -7,7 +7,6 @@ import Markdown from 'react-markdown'
 import { useState } from 'react'
 import remarkGfm from 'remark-gfm'
 import axios from 'axios'
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation'
 import { ReloadIcon } from '@radix-ui/react-icons'
 
@@ -17,12 +16,13 @@ export default function NewPost() {
     title: '',
     description: '',
     markdown: '',
+    tags: ''
   })
   const [disabledButton, setDisabledButton] = useState(true)
   const [loadingButton, setLoadingButton] = useState(false)
 
   useEffect(()=>{
-    if(markdownData.title.length === 0 || markdownData.description.length === 0 || markdownData.markdown.length === 0 ){
+    if(markdownData.title.length === 0 || markdownData.description.length === 0 || markdownData.markdown.length === 0  || markdownData.tags.length === 0 ){
       setDisabledButton(true)
     } else {
       setDisabledButton(false)
@@ -43,7 +43,6 @@ export default function NewPost() {
   async function SendPost(){
     setLoadingButton(true)
     const apiUrl = process.env.NEXT_PUBLIC_API_URL
-    const token = Cookies.get('token')
     const payload = markdownData
     await axios.post(apiUrl+'/posts/new',payload , { withCredentials: true })
     .then((res)=> {
@@ -88,13 +87,22 @@ export default function NewPost() {
                 <span className='font-bold '>Description</span>
               </div>
               <div className='w-full h-full bg-neutral-100 px-4 py-4'>
-                <textarea name='description' onChange={GetMarkDown} value={markdownData.description} placeholder='Type your title here' autoFocus className='outline-none resize-none bg-transparent text-neutral-600 placeholder:text-neutral-400 text-sm h-full w-full'></textarea>
+                <textarea name='description' onChange={GetMarkDown} value={markdownData.description} placeholder='Type your description here' autoFocus className='outline-none resize-none bg-transparent text-neutral-600 placeholder:text-neutral-400 text-sm h-full w-full'></textarea>
+              </div>
+            </div>
+
+            <div className='flex flex-col h-full w-auto border rounded-sm'>
+              <div className='py-2 px-2 w-full h-2rem border-b-[1px]'>
+                <span className='font-bold '>Tags</span>
+              </div>
+              <div className='w-full h-full bg-neutral-100 px-4 py-4'>
+                <textarea name='tags' onChange={GetMarkDown} value={markdownData.tags} placeholder='Type your tags with: # and separate with: ,' autoFocus className='outline-none resize-none bg-transparent text-neutral-600 placeholder:text-neutral-400 text-sm h-full w-full'></textarea>
               </div>
             </div>
 
       
           </div>
-          <div className='grid grid-rows-2 md:grid-rows-1 md:grid-cols-2 gap-4 h-[60dvh] w-full mt-4'>
+          <div className='grid grid-rows-2 md:grid-rows-1 md:grid-cols-2 gap-4 h-[80dvh] w-full mt-4'>
             <div className='flex flex-col h-full w-auto border rounded-sm'>
               <div className='py-2 px-2 w-full h-2rem border-b-[1px]'>
                 <span className='font-bold '>Markdown</span>

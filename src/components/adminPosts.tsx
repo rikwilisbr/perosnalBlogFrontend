@@ -48,7 +48,7 @@ export function AdminPosts() {
                   <div className="w-full h-[1px] bg-neutral-200"></div>
                 </div>
               )
-          })
+          }).reverse()
         } 
       </Suspense>
     </div>

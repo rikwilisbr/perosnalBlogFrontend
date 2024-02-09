@@ -21,6 +21,7 @@ export default function EditPost({params}: EditPageProps) {
     title: '',
     description: '',
     markdown: '',
+    tags: ''
   })
   const [disabledButton, setDisabledButton] = useState(true)
   const [loadingButton, setLoadingButton] = useState(false)
@@ -37,6 +38,7 @@ export default function EditPost({params}: EditPageProps) {
           title: data.title,
           description: data.description,
           markdown: data.markdown,
+          tags: data.tags.join(',')
         }
       })
     }
@@ -65,7 +67,6 @@ export default function EditPost({params}: EditPageProps) {
 
   async function SendPost(){
     setLoadingButton(true)
-    const token = Cookies.get('token')
     const payload = markdownData
     const paramsName = params.title.replace(/-/g, ' ')
     await axios.put(apiUrl+'/posts/edit/'+paramsName, payload, {withCredentials: true})
@@ -112,6 +113,15 @@ export default function EditPost({params}: EditPageProps) {
               </div>
               <div className='w-full h-full bg-neutral-100 px-4 py-4'>
                 <textarea name='description' onChange={GetMarkDown} value={markdownData.description} placeholder='Type your title here' autoFocus className='outline-none resize-none bg-transparent text-neutral-600 placeholder:text-neutral-400 text-sm h-full w-full'></textarea>
+              </div>
+            </div>
+
+            <div className='flex flex-col h-full w-auto border rounded-sm'>
+              <div className='py-2 px-2 w-full h-2rem border-b-[1px]'>
+                <span className='font-bold '>Tags</span>
+              </div>
+              <div className='w-full h-full bg-neutral-100 px-4 py-4'>
+                <textarea name='tags' onChange={GetMarkDown} value={markdownData.tags} placeholder='Type your tags with: # and separate with: ,' autoFocus className='outline-none resize-none bg-transparent text-neutral-600 placeholder:text-neutral-400 text-sm h-full w-full'></textarea>
               </div>
             </div>
 
