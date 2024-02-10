@@ -16,7 +16,7 @@ type PostTypes = {
 export function AdminPosts() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const postsData: PostTypes[] = use(axios.get(apiUrl+'/posts').then((res)=> { return res.data.message }))
-  
+  // format name
   function FormatName(name: string) {
     const result = name.replace(/ /g, "-");
     return result
