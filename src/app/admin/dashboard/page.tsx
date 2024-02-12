@@ -1,8 +1,17 @@
 import React from 'react'
 import AdminNavBar from '@/components/adminNavBar'
-import { AdminPosts } from '@/components/adminPosts'
+import AdminPosts from '@/components/adminPosts'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+
+type PostTypes = {
+  id: string
+  title: string,
+  description: string,
+  markdown: string
+  tags: string[]
+  date: string
+}
 
 export default function AdminDashboard() {
   return (

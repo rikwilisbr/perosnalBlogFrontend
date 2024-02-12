@@ -1,10 +1,7 @@
-import axios from "axios";
-import { use } from "react";
 import PostItem from "@/components/postItem";
 import Header from "@/components/header";
 import Newsletter from "@/components/newsletter";
 import Footer from "@/components/footer";
-
 
 type PostTypes = {
   id: string
@@ -15,17 +12,27 @@ type PostTypes = {
   tags: string[]
 }
 
-export default function Home() {
-
+async function getData(){
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
-  const postsData: PostTypes[] = use(axios.get(apiUrl+'/posts/tag/homepage').then((res)=> { return res.data.message }))
+  const res = await fetch(apiUrl+'/posts/tag/homepage',{
+    next:{
+      revalidate: 30
+    }
+  })
+  return res.json()
+} 
+
+export default async function Home() {
+
+  const postsData = await getData()
+  const data = postsData.message
 
   return (
     <div className="flex flex-col py-[4rem] px-4 max-w-prose m-auto relative font-sans">
         <Header IsHighLighted={'home'} />
       <div className="flex flex-col gap-8 mt-10 w-full">
         {
-          postsData.map((prop, index)=>{
+          data.map((prop: PostTypes, index: number)=>{
             return (
               <div key={index}>
                 <PostItem 

@@ -1,7 +1,6 @@
 import { Button } from "./ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card"
-import { Suspense, use } from "react"
-import axios from "axios"
+import { Suspense } from "react"
 import Link from "next/link"
 import AdminDeleteDialog from "./adminDeleteDialog"
 
@@ -10,13 +9,24 @@ type PostTypes = {
   title: string,
   description: string,
   markdown: string
+  tags: string[]
   date: string
 }
 
-export function AdminPosts() {
+async function getData(){
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
-  const postsData: PostTypes[] = use(axios.get(apiUrl+'/posts').then((res)=> { return res.data.message }))
-  // format name
+  const res = await fetch(apiUrl+'/posts',{
+    next:{
+      revalidate: 1
+    }
+  })
+  return res.json()
+} 
+
+export default async function AdminPosts() {
+  
+  const postsData = await getData()
+  const data = postsData.message
   function FormatName(name: string) {
     const result = name.replace(/ /g, "-");
     return result
@@ -27,7 +37,7 @@ export function AdminPosts() {
     
       <Suspense fallback={<div>loading...</div>} >
         {
-          postsData.map((prop, index)=>{
+           data.map((prop: PostTypes, index: number)=>{
               return(
                 <div key={index}>
                   <Card className="w-full rounded-none border-[0px]">
