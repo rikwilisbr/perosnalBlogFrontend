@@ -7,11 +7,12 @@ import AdminMiddleware from './middlewares/admin.middleware';
 
 const middlewares = {
     '/admin/dashboard': DashboardMiddleware,
+    '/admin/dashboard/:path*': DashboardMiddleware,
     '/admin/login': LoginMiddleware,
     '/admin': AdminMiddleware
 }
 export const middleware = createMiddleware(middlewares);
 
 export const config = {
-  matcher: ['/admin/dashboard', '/admin/login', '/admin'],
+  matcher: ['/admin/dashboard', '/admin/login', '/admin', '/admin/dashboard/:path*'],
 }
